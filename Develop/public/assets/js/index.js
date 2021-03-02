@@ -1,9 +1,12 @@
+// const { response } = require("express");
+
 let noteTitle;
 let noteText;
 let saveNoteBtn;
 let newNoteBtn;
 let noteList;
 
+// creating notes.html dynamically
 if (window.location.pathname === '/notes') {
   noteTitle = document.querySelector('.note-title');
   noteText = document.querySelector('.note-textarea');
@@ -37,30 +40,37 @@ const saveNote = (note) =>
   fetch('/api/notes', {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify(note),
   });
+// .then((response) => {
+//   if (response.ok) {
+//     return response.json();
+//   }
+//   alert("error: " + response.statusText);
+// });
 
 const deleteNote = (id) =>
   fetch(`/api/notes/${id}`, {
     method: 'DELETE',
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
   });
 
 const renderActiveNote = () => {
   hide(saveNoteBtn);
-
   if (activeNote.id) {
-    noteTitle.setAttribute('readonly', true);
-    noteText.setAttribute('readonly', true);
+    noteTitle.setAttribute("readonly", true);
+    noteText.setAttribute("readonly", true);
     noteTitle.value = activeNote.title;
-    noteText.value = activeNote.title;
+    noteText.value = activeNote.text;
   } else {
     noteTitle.value = '';
     noteText.value = '';
+    noteTitle.removeAttribute('readonly');
+    noteText.removeAttribute('readonly');
   }
 };
 
@@ -153,15 +163,15 @@ const renderNoteList = async (notes) => {
 
   if (jsonNotes.length === 0) {
     noteListItems.push(createLi('No saved Notes', false));
+  } else {
+
+    jsonNotes.forEach((note) => {
+      const li = createLi(note.title);
+      li.dataset.note = JSON.stringify(note);
+
+      noteListItems.push(li);
+    });
   }
-
-  jsonNotes.forEach((note) => {
-    const li = createLi(note.title);
-    li.dataset.note = JSON.stringify(note);
-
-    noteListItems.push(li);
-  });
-
   if (window.location.pathname === '/notes') {
     noteListItems.forEach((note) => noteList[0].append(note));
   }

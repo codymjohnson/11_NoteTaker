@@ -1,26 +1,34 @@
-const { fstat } = require("fs");
-const path = require("path");
-const notes = require('../db/db.json');
 
+// load up data
+const noteDb = require("../db/db.json");
+const fs = require("fs");
+const genId = require("generate-unique-id");
+
+// routes
 module.exports = (app) => {
-    // GET route return
-    app.get("/api/notes", (req, res) => {
-        res.json(notes);
-    });
+    app.get("/api/notes", (req, res) => res.json(noteDb));
 
     app.post("/api/notes", (req, res) => {
-        const note = req.body;
-        let id = id + 1;
-        notes.push(note);
-        return res.json(notes);
-        updateNoteDb();
+        const newNote = {
+            title: req.body.title,
+            text: req.body.text,
+            id: genId(),
+        };
+        noteDb.push(newNote);
+        res.end();
     });
-    // updating json files
-    function updateNoteDb() {
-        fs.writeFile("db/db.json", JSON.stringify(notes, '\t'), err => {
-            if (err) throw err;
-            return true;
+
+    app.delete("/api/notes/:id", (req, res) => {
+        const noteId = req.params.id;
+        console.log(noteId);
+        const removeNoteIndex = noteDb.findIndex((obj) => {
+            return obj.id === noteId;
         });
-    }
+
+        if (removeNoteIndex !== -1) {
+            noteDb.splice(removeNoteIndex, 1);
+        };
+        res.end();
+    });
 
 };

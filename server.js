@@ -3,13 +3,12 @@ const express = require('express');
 
 // config for express
 const app = express();
-
 // port
 const PORT = process.env.PORT || 9000;
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(express.static('public'));
+app.use(express.static('Develop/public'));
 
 // routes
 require('./Develop/routes/apiRoutes')(app);
