@@ -1,6 +1,6 @@
 # 11_NoteTaker
 
-![Note_Taker gif]()
+![Note_Taker gif](https://github.com/codymjohnson/11_NoteTaker/blob/main/Develop/public/assets/gifs/Note_Taker.gif)
 
 [Depoyed Link on Heroku](https://note-taker6.herokuapp.com/)
 
